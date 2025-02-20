@@ -108,6 +108,12 @@ app.get("/academic/record/:identification", async (req, res) => {
       (sum, semestre) => sum + parseFloat(semestre.average),
       0
     );
+    const fecha_inicio = new Date(
+      queryIncription.rows[0].fecha_inicio
+    ).toISOString();
+    const fecha_fin = new Date(
+      queryIncription.rows[queryIncription.rows.length - 1].fecha_fin
+    ).toISOString();
 
     const data = {
       university: queryUniversity.rows[0],
@@ -117,6 +123,7 @@ app.get("/academic/record/:identification", async (req, res) => {
       semesters: agrupadoPorSemestre,
       average: (average / agrupadoPorSemestre.length).toFixed(2),
       autorities: queryAutority.rows,
+      year: `${fecha_inicio.split("-")[0]} - ${fecha_fin.split("-")[0]}`,
     };
 
     res.json({
